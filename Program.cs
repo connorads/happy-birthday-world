@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
 
-namespace aspnetapp
+namespace HappyBirthdayWorld.Api
 {
     public class Program
     {

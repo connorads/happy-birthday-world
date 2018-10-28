@@ -8,6 +8,6 @@ RUN dotnet restore
 
 # Copy everything else and build
 COPY . ./
-RUN dotnet publish "happy-birthday-world.api.csproj" -c Release -o out
+RUN dotnet publish "HappyBirthdayWorld.Api.csproj" -c Release -o out
 
-ENTRYPOINT ["dotnet", "out/happy-birthday-world.api.dll"]
+ENTRYPOINT ["dotnet", "out/HappyBirthdayWorld.Api.dll"]
