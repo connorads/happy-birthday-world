@@ -1,3 +1,4 @@
+# No Multi Stage build in GKE version 1.10.7-gke.6
 FROM microsoft/dotnet:2.1-sdk
 WORKDIR /app
 EXPOSE 80

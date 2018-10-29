@@ -35,7 +35,7 @@ namespace HappyBirthdayWorld.Api
                     Version = "v1",
                     Title = "Happy Birthday World",
                     Description = "Get a personalised birthday countdown and happy birthday message.",
-                    Contact = new Contact() { Name = "@connorads", Url = "www.connoradams.co.uk" }
+                    Contact = new Contact { Name = "@connorads", Url = "http://connoradams.co.uk" }
                 });
             });
         }
