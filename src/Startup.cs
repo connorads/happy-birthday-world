@@ -1,5 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using HappyBirthdayWorld.Api.Domain;
+using HappyBirthdayWorld.Api.Repositories;
+using HappyBirthdayWorld.Api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -26,7 +27,8 @@ namespace HappyBirthdayWorld.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddSingleton<IDictionary<string, DateTime>>(new Dictionary<string, DateTime>());
+            services.AddSingleton<IBirthdayRepository>(new InMemoryBirthdayRepo());
+            services.AddSingleton<IBirthdayCalculator>(new BirthdayCalculator(new DateService()));
             
             services.AddSwaggerGen(c =>
             {

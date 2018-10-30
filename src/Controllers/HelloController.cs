@@ -1,6 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using HappyBirthdayWorld.Api.Domain;
+using HappyBirthdayWorld.Api.Models;
+using HappyBirthdayWorld.Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HappyBirthdayWorld.Api.Controllers
@@ -8,51 +10,52 @@ namespace HappyBirthdayWorld.Api.Controllers
     [Route("/hello")]
     public class HelloController : Controller
     {
-        private IDictionary<string, DateTime> birthdays;
+        private readonly IBirthdayRepository birthdayRepository;
+        private readonly IBirthdayCalculator birthdayCalculator;
 
-        public HelloController(IDictionary<string, DateTime> birthdays)
+        public HelloController(
+            IBirthdayRepository birthdayRepository,
+            IBirthdayCalculator birthdayCalculator)
         {
-            this.birthdays = birthdays;
+            this.birthdayRepository = birthdayRepository;
+            this.birthdayCalculator = birthdayCalculator;
         }
 
         [HttpGet("{name}")]
         public ActionResult<string> Get(string name)
         {
-            var foundDob = birthdays.TryGetValue(name, out var dob);
-            if (foundDob)
-            {
-                return Ok(new BirthdayMessage {Message = 
-                    $"Happy Birthday {name} - {dob}"
-                });
-            }
+            if (name == null) return BadRequest();
 
-            return NotFound();
+            name = name.Trim();
+            var foundDob = birthdayRepository.TryGetDateOfBirth(name, out var dateOfBirth);
+            if (!foundDob) return NotFound();
+
+            var daysUntilNextBirthday =
+                birthdayCalculator.DaysUntilNextBirthday(dateOfBirth);
+
+            var countdownMessage = daysUntilNextBirthday == 0
+                ? "Happy Birthday!"
+                : $"Your birthday is in {daysUntilNextBirthday} days";
+
+            return Ok(new {Message = $"Hello, {name}! {countdownMessage}"});
+
         }
 
         [HttpPut("{name}")]
         public ActionResult Put(
-            [FromRoute] [Required] string name,
-            [FromBody] [Required] DateOfBirth dateOfBirth)
+            [FromRoute, Required] string name,
+            [FromBody, Required] DateOfBirth dateOfBirth)
         {
-            if (ModelState.IsValid)
-            {
-                birthdays[name] = dateOfBirth.dateOfBirth;
-                return NoContent();
-            }
-            
-            return BadRequest(ModelState);
-        } 
+            if (!ModelState.IsValid || name == null || DobIsInFuture(dateOfBirth)) return BadRequest(ModelState);
+            birthdayRepository.PutDateOfBirth(name.Trim(), dateOfBirth.dateOfBirth.Date);
+            return NoContent();
+        }
+
+        private static bool DobIsInFuture(DateOfBirth dateOfBirth)
+        {
+            return !(dateOfBirth.dateOfBirth.Date <= DateTime.Today);
+        }
     }
 
-    public class DateOfBirth
-    {
-        [Required]
-        [DataType(DataType.Date)]
-        public DateTime dateOfBirth { get; set; }
-    }
 
-    public class BirthdayMessage
-    {
-        public string Message { get; set; }
-    }
 }

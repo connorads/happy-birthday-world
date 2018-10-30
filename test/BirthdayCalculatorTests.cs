@@ -1,12 +1,14 @@
 using System;
 using HappyBirthdayWorld.Api.Domain;
+using HappyBirthdayWorld.Api.Services;
+using Moq;
 using Xunit;
 
 namespace HappyBirthdayWorld.Tests
 {
     public class BirthdayCalculatorTests
     {
-        private readonly IBirthdayCalculator bc = new BirthdayCalculator();
+        private readonly BirthdayCalculator bc = new BirthdayCalculator(new DateService());
 
         [Fact]
         public void NextBirthdayIsToday()
@@ -35,9 +37,25 @@ namespace HappyBirthdayWorld.Tests
         [Fact]
         public void NextBirthdayIsFollowingYear_BornOnLeapDay_NextYearIsNotLeapYear()
         {
-            // TODO Question for product owner, are we okay to assume a Feb 28th Birthday? https://bit.ly/2ENDhFe
             int daysUntilFebTwentyEighth = 141;
             Assert.Equal(daysUntilFebTwentyEighth, bc.DaysUntilNextBirthday(DateTime.Parse("29/02/1996"), DateTime.Parse("10/10/2018")));
+        }
+
+        [Fact]
+        public void IgnoreTimeOnDates()
+        {
+            Assert.Equal(0, bc.DaysUntilNextBirthday(DateTime.Parse("09/06/2019 11:10:13"), DateTime.Parse("09/06/2019 23:14:11")));
+        }
+
+        [Fact]
+        public void ShorterMethod_CallsDateServiceOnce()
+        {
+            var mock = new Mock<IDateService>();
+            var birthdayCalculator = new BirthdayCalculator(mock.Object);
+
+            birthdayCalculator.DaysUntilNextBirthday(new DateTime());
+
+            mock.Verify(ds => ds.GetDateToday(), Times.Once);
         }
     }
 }
