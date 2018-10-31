@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using HappyBirthdayWorld.Api.Models;
 
 namespace HappyBirthdayWorld.Api.Repositories
 {
@@ -14,10 +15,10 @@ namespace HappyBirthdayWorld.Api.Repositories
             return false;
         }
 
-        public void PutDateOfBirth(string name, DateTime dateOfBirth)
+        public void PutDateOfBirth(BirthRecord birthRecord)
         {
-            if (name == null) throw new ArgumentNullException(nameof(name));
-            birthdays[name] = dateOfBirth;
+            if (birthRecord.Name == null) throw new ArgumentNullException(nameof(birthRecord.Name));
+            birthdays[birthRecord.Name] = birthRecord.DateOfBirth;
         }
     }
 }

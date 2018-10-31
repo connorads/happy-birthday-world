@@ -3,6 +3,8 @@ using HappyBirthdayWorld.Api.Repositories;
 using HappyBirthdayWorld.Api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -18,6 +20,7 @@ namespace HappyBirthdayWorld.Api
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile("secrets/appsettings.secrets.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
         }
@@ -26,9 +29,15 @@ namespace HappyBirthdayWorld.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
-            services.AddSingleton<IBirthdayRepository>(new InMemoryBirthdayRepo());
-            services.AddSingleton<IBirthdayCalculator>(new BirthdayCalculator(new DateService()));
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+        
+            var connectionString = Configuration.GetConnectionString("BirthdayContext");
+            services.AddEntityFrameworkNpgsql().AddDbContext<BirthdayContext>
+                (options => options.UseNpgsql(connectionString));
+            
+            services.AddScoped<IBirthdayRepository, DatabaseBirthdayRepository>();
+            services.AddScoped<IBirthdayCalculator, BirthdayCalculator>();
+            services.AddScoped<IDateService, DateService>();
             
             services.AddSwaggerGen(c =>
             {

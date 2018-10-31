@@ -1,7 +1,7 @@
 ﻿using System;
 using HappyBirthdayWorld.Api.Controllers;
 using HappyBirthdayWorld.Api.Domain;
-using HappyBirthdayWorld.Api.Models;
+using HappyBirthdayWorld.Api.Dto;
 using HappyBirthdayWorld.Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Moq;

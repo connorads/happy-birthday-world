@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using HappyBirthdayWorld.Api.Domain;
+using HappyBirthdayWorld.Api.Dto;
 using HappyBirthdayWorld.Api.Models;
 using HappyBirthdayWorld.Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -47,7 +48,7 @@ namespace HappyBirthdayWorld.Api.Controllers
             [FromBody, Required] DateOfBirth dateOfBirth)
         {
             if (!ModelState.IsValid || name == null || DobIsInFuture(dateOfBirth)) return BadRequest(ModelState);
-            birthdayRepository.PutDateOfBirth(name.Trim(), dateOfBirth.dateOfBirth.Date);
+            birthdayRepository.PutDateOfBirth(new BirthRecord(name.Trim(), dateOfBirth.dateOfBirth.Date));
             return NoContent();
         }
 

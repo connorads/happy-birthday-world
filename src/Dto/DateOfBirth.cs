@@ -1,8 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-
-namespace HappyBirthdayWorld.Api.Models
+namespace HappyBirthdayWorld.Api.Dto
 {
     public class DateOfBirth
     {
