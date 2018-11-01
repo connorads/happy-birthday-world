@@ -23,13 +23,49 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: {{ .Values.service.internalPort }}
+        env:
+        - name: POSTGRES_DB_HOST
+          value: 127.0.0.1:5432
+        # [START cloudsql_secrets]
+        - name: POSTGRES_DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: cloudsql-db-credentials
+              key: username
+        - name: POSTGRES_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: cloudsql-db-credentials
+              key: password
+        # [END cloudsql_secrets]
         resources:
 {{ toYaml .Values.resources | indent 12 }}
         volumeMounts:
           - name: secrets
             mountPath: /app/secrets
             readOnly: true
+        # [START proxy_container]
+      - name: cloudsql-proxy
+        image: gcr.io/cloudsql-docker/gce-proxy:1.11
+        command: ["/cloud_sql_proxy",
+                  "-instances=grounded-region-220319:europe-west2:happy-birthday-world-staging=tcp:5432",
+                  "-credential_file=/secrets/cloudsql/credentials.json"]
+        # [START cloudsql_security_context]
+        securityContext:
+          runAsUser: 2  # non-root user
+          allowPrivilegeEscalation: false
+        # [END cloudsql_security_context]
+        volumeMounts:
+          - name: cloudsql-instance-credentials
+            mountPath: /secrets/cloudsql
+            readOnly: true
+      # [END proxy_container]
+      # [START volumes]
       volumes:
+        - name: cloudsql-instance-credentials
+          secret:
+            secretName: cloudsql-instance-credentials
       - name: secrets
         secret:
           secretName: secret-appsettings
+      # [END volumes]
