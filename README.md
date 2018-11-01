@@ -18,11 +18,11 @@ Running on my Google Cloud Platform, please don't hammer it 😅
 It's got the Swagger UI running so you can test it quite easily 👍  
 Probably best to avoid the Staging environment for now 😬
 
-Environment | Storage Status
------------ |  --------------  
-Local | Works with PostgreSQL and in-memory mode
-[Staging](http://happy-birthday-world.jx-staging.35.234.144.66.nip.io/) | Not working, needs Cloud SQL proxy sidecar
-[Production](http://happy-birthday-world.jx-production.35.234.144.66.nip.io/) | Works but in-memory (ephemeral)
+Environment | Repo | Storage Status
+----------- | --------------  | --------------  
+Local | ¯\\\_(ツ)\_/¯ | Works with PostgreSQL and in-memory mode
+[Staging](http://happy-birthday-world.jx-staging.35.234.144.66.nip.io/) | [razorbow-staging](https://github.com/connorads/environment-razorbow-staging) |Not working, needs Cloud SQL proxy sidecar
+[Production](http://happy-birthday-world.jx-production.35.234.144.66.nip.io/) | [razorbow-production](https://github.com/connorads/environment-razorbow-production) |Works but in-memory (ephemeral)
 
 ## Technologies
 
@@ -47,6 +47,12 @@ Push to master and the Jenkins-X platform will build, version, tag, and release 
 
 If you want to promote a version of your app to production:  
 `jx promote --version 0.0.9 --env production`  
+
+### Google Cloud Platform
+
+![GKE Services](http://i68.tinypic.com/29xgfms.png)
+![Cloud SQL](http://i64.tinypic.com/2rm39lf.png)
+
 
 ## Assumptions
 
