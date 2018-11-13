@@ -26,18 +26,6 @@ spec:
         env:
         - name: POSTGRES_DB_HOST
           value: 127.0.0.1:5432
-        # [START cloudsql_secrets]
-        - name: POSTGRES_DB_USER
-          valueFrom:
-            secretKeyRef:
-              name: cloudsql-db-credentials
-              key: username
-        - name: POSTGRES_DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: cloudsql-db-credentials
-              key: password
-        # [END cloudsql_secrets]
         resources:
 {{ toYaml .Values.resources | indent 12 }}
         volumeMounts:
