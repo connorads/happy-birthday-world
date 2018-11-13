@@ -62,9 +62,9 @@ spec:
       # [END proxy_container]
       # [START volumes]
       volumes:
-        - name: cloudsql-instance-credentials
-          secret:
-            secretName: cloudsql-instance-credentials
+      - name: cloudsql-instance-credentials
+        secret:
+          secretName: cloudsql-instance-credentials
       - name: secrets
         secret:
           secretName: secret-appsettings
