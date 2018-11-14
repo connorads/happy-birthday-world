@@ -19,7 +19,7 @@ Get a personalised birthday countdown and happy birthday message 🎂
 Happy Birthday World is deployed on Google Cloud Platform*  
 It's got the Swagger UI running so you can test it quite easily 👍  
 
-Environment | Repo | Storage Status
+Environment | GitOps Repo | Storage Status
 ----------- | --------------  | --------------  
 Local | ¯\\\_(ツ)\_/¯ | PostgreSQL or in-memory mode
 [Staging](http://happy-birthday-world.jx-staging.35.234.144.66.nip.io/) | [razorbow-staging](https://github.com/connorads/environment-razorbow-staging) |Connected to Staging Cloud SQL instance
