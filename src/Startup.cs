@@ -1,4 +1,7 @@
-﻿using HappyBirthdayWorld.Api.Domain;
+﻿using System;
+using System.IO;
+using System.Reflection;
+using HappyBirthdayWorld.Api.Domain;
 using HappyBirthdayWorld.Api.Repositories;
 using HappyBirthdayWorld.Api.Services;
 using Microsoft.AspNetCore.Builder;
@@ -48,6 +51,10 @@ namespace HappyBirthdayWorld.Api
                     Description = "Get a personalised birthday countdown and happy birthday message.",
                     Contact = new Contact { Name = "@connorads", Url = "http://connoradams.co.uk" }
                 });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
         }
 

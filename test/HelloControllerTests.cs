@@ -93,7 +93,7 @@ namespace HappyBirthdayWorld.Tests
 
             var getResult = helloController.Get(null).Result;
 
-            Assert.IsType<BadRequestResult>(getResult);
+            Assert.IsType<BadRequestObjectResult>(getResult);
         }
     }
 }

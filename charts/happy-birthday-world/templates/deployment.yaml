@@ -23,9 +23,6 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: {{ .Values.service.internalPort }}
-        env:
-        - name: POSTGRES_DB_HOST
-          value: 127.0.0.1:5432
         resources:
 {{ toYaml .Values.resources | indent 12 }}
         volumeMounts:
