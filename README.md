@@ -53,11 +53,6 @@ Push to master and the Jenkins-X platform will build, version, tag, and release 
 If you want to promote a version of your app to production:  
 `jx promote --version 0.0.9 --env production`  
 
-### Google Cloud Platform
-
-![GKE Services](http://i68.tinypic.com/29xgfms.png)
-![Cloud SQL](http://i64.tinypic.com/2rm39lf.png)
-
 ## Assumptions
 
 Here are some assumptions that need to be validated by the "Product Owner" 👀
